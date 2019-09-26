@@ -1,0 +1,28 @@
+[
+  {
+    "manic": {
+
+    },
+    "solipcistic": {
+
+    },
+    "grandiose" : {
+    },
+    "divine": {
+
+    },
+    "paranoid": {
+      "i_verbs": ["scared of", "afraid of", "under attack by", "frightened by", "freaked out by"]
+      "noun_adjectives": ["suspicious", "dangerous", "risky", "unsafe"],
+      "noun_verbs": ["looks", "could be"],
+      "noun_phrases": ["is coming for me", "makes my heart beat faster", "is after me", "is hunting me", "doesn't like me"]
+    },
+    "hallucinogenic": {
+      "i_verbs": ["see"],
+      "noun_verbs": ["is a sign of"]
+    },
+    "noise" : {
+
+    }
+  }
+]

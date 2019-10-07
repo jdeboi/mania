@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
 router.post('/tweet', function(req, res, next) {
   let text = req.body.text;
   let id = parseInt(req.body.id);
-  console.log("id", id, req);
   console.log('Opening an image...');
   var image_path = path.join(__dirname, "../" + getImagePath(id)),
   b64content = fs.readFileSync(image_path, { encoding: 'base64' });
@@ -24,8 +23,8 @@ router.post('/tweet', function(req, res, next) {
   T.post('media/upload', { media_data: b64content },
   function (err, data, response) {
     if (err){
-      console.log('ERROR:');
-      console.log(err);
+      console.log('ERROR1:');
+      // console.log(err);
       res.status(400).send(err);
     }
     else{
@@ -38,8 +37,8 @@ router.post('/tweet', function(req, res, next) {
       },
       function(err, data, response) {
         if (err){
-          console.log('ERROR:');
-          console.log(err);
+          console.log('ERROR2:');
+          // console.log(err);
           res.status(400).send(err);
         }
         else{
@@ -87,7 +86,8 @@ router.post('/tweet', function(req, res, next) {
 
 function getImagePath(id) {
   let num = zeroFill(id, 9);
-  return `/public/images/densedepth/${num}.png`;
+  console.log("id", id);
+  return `/public/images/final/${num}.jpg`;
 }
 
 function zeroFill( number, width ) {

@@ -9,13 +9,17 @@
     "grandiose" : {
     },
     "divine": {
-
+      "i_am": ["the", "afraid of", "under attack by", "frightened by", "freaked out by"]
+      "adj": ["messianic", "heavenly", "holy", "sacred", "divine", "deistic"],
+      "verbs": [],
+      "noun": ["Jesus", "God", "Buddha", "The Holy Spirit", "Joan of Arc"],
     },
     "paranoid": {
-      "i_verbs": ["scared of", "afraid of", "under attack by", "frightened by", "freaked out by"]
-      "noun_adjectives": ["suspicious", "dangerous", "risky", "unsafe"],
-      "noun_verbs": ["looks", "could be"],
-      "noun_phrases": ["is coming for me", "makes my heart beat faster", "is after me", "is hunting me", "doesn't like me"]
+      "i_am": ["scared of", "afraid of", "under attack by", "frightened by", "freaked out by"]
+      "adj": ["suspicious", "dangerous", "risky", "unsafe"],
+      "verbs": ["looks", "could be"],
+      "noun": ["killer", ""]
+      "noun_": ["is coming for me", "makes my heart beat faster", "is after me", "is hunting me", "doesn't like me"]
     },
     "hallucinogenic": {
       "i_verbs": ["see"],

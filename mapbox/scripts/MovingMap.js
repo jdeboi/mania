@@ -1,3 +1,5 @@
+let TWEETING = true;
+
 mapboxgl.accessToken = "pk.eyJ1IjoiamRlYm9pIiwiYSI6ImNpeGRycXVreTAwZ20yemw2cmxta2N1anAifQ.O1DaomQGJpctzx05Vq422w";
 let map = new mapboxgl.Map({
   container: 'map',
@@ -5,6 +7,15 @@ let map = new mapboxgl.Map({
   zoom: 12
 });
 
+let canvas;
+
+function setup() {
+  canvas = createCanvas(400, 400);
+}
+
+function draw() {
+  // background(0);
+}
 
 map.on('load', function () {
   // We use D3 to fetch the JSON here so that we can parse and use it separately
@@ -64,6 +75,7 @@ map.on('load', function () {
             let jsteps = dis / maxStep;
             jstep = 1/jsteps;
             j = 0;
+            sendTweet(i);
           }
           // data.features[0].geometry.coordinates.push(coordinates[i]);
         }
@@ -73,6 +85,65 @@ map.on('load', function () {
     }, 10);
   });
 });
+
+function sendTweet(i) {
+  // let num = Math.floor(i / 3);
+  // if (i%3 == 0 && num < 11) {
+  if (i < 11) {
+    search(i, "I am the Lord");
+  }
+}
+
+const bibleVersionID = '06125adad2d5898a-01';
+const abbreviation = 'ASV';
+
+// const query = "sign";
+// search(query);
+
+function search(i, searchText, offset = 0) {
+  getBibleResults(searchText, offset).then((data) => {
+    // console.log(data);
+    let index = Math.floor(random(10));
+    let verse = data.verses[index].text;
+    let ref = data.verses[index].reference;
+    if (TWEETING) tweet(i, ref + " " + verse);
+  });
+}
+
+
+function getBibleResults(searchText, offset = 0) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+
+    xhr.addEventListener('readystatechange', function() {
+      if (this.readyState === this.DONE) {
+        const {data, meta} = JSON.parse(this.responseText);
+
+        // _BAPI.t(meta.fumsId);
+        resolve(data);
+      }
+    });
+
+    xhr.open('GET', `https://api.scripture.api.bible/v1/bibles/${bibleVersionID}/search?query=${searchText}&offset=${offset}`);
+    xhr.setRequestHeader('api-key', keys.bible);
+
+    xhr.onerror = () => reject(xhr.statusText);
+
+    xhr.send();
+  });
+}
+
+function tweet(id, text) {
+  let path = "http://localhost:3000/tweet";
+  data = {id: id, text: text};
+  httpPost(path, "json", data,
+  function(result) {
+    console.log(result);
+  }, function(error) {
+    console.log("error");
+  })
+}
 
 function getGeoJson(coords) {
   let geojson = {

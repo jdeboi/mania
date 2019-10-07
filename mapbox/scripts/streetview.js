@@ -1,3 +1,5 @@
+
+let STREET_VIEW_ON = false;
 /*
 If there are 100 coordinates in a day
 I could run this program 285 times per month
@@ -19,13 +21,12 @@ Dynamic panorama SKU
 
 */
 
-let STREET_VIEW_ON = true;
 let imgs = [];
+let imagesDone = false;
 let imgIDs = [];
 let photoID = 0;
 
 let steps;
-let keys;
 let saveIndex = 0;
 
 let todayIndex = 0;
@@ -33,43 +34,75 @@ let saved = false;
 let lastChecked = 0;
 
 function preload() {
-  keys = loadJSON('../json/keys.json');
   steps = loadJSON('../json/steps.json');
 }
 
 function setup() {
   createCanvas(456, 456);
-  loadImages(steps[todayIndex].coordinates);
+
+  loadImages(steps[todayIndex].coordinates)
+  .then(function(allimgs) {
+    console.log("all promises done");
+    imagesDone = true;
+    for (img of allimgs) {
+      imgs.push(img);
+    }
+  })
+  .catch(function (error) {
+    console.log('Something went wrong', error);
+  });
 }
 
 function draw() {
   // console.log(imgIDs.length, steps[todayIndex].coordinates.length);
-  if (!saved && imgIDs.length == steps[todayIndex].coordinates.length) {
-    saveImages();
+  if (imagesDone) {
+    //saveImages();
+    console.log("save imgs");
   }
 
 }
 
+// function loadImages(coords) {
+//   if (STREET_VIEW_ON) {
+//     for (let i = 0; i < coords.length; i++) {
+//       imgs[i] = loadImage(getStreetViewURL(coords[i]), function() {
+//         success(i);
+//       },
+//       function() {
+//         fail(i);
+//       });
+//     }
+//   }
+// }
+
 function loadImages(coords) {
-  if (STREET_VIEW_ON) {
-    for (let i = 0; i < coords.length; i++) {
-      imgs[i] = loadImage(getStreetViewURL(coords[i]), function() {
-        success(i);
-      },
-      function() {
-        fail(i);
-      });
-    }
-  }
+  const promises = []
+
+  coords.map((coord) => {
+    let path = getStreetViewURL(coord)
+    promises.push(loadImagePromise(path));
+  })
+
+  console.log(promises) // [ Promise { "pending" }, Promise { "pending" }, Promise { "pending" } ]
+
+  // We are passing an array of pending promises to Promise.all
+  // Promise.all will wait till all the promises get resolves and then the same gets resolved.
+  return Promise.all(promises)
+}
+
+function loadImagePromise(path) {
+  return new Promise(function(resolve, reject) {
+    loadImage(path, (img) => resolve(img), (error) => reject(error));
+  })
 }
 
 function saveImages() {
   // for (let i = 0; i < imgIDs.length; i++) {
-  if (saveIndex < imgIDs.length) {
+  if (saveIndex < imgs.length) {
     if (millis() - lastChecked > 500) {
-      console.log("saving", imgIDs[saveIndex]);
+      console.log("saving", saveIndex); //imgIDs[saveIndex]);
       lastChecked = millis();
-      let num = zeroFill(imgIDs[saveIndex], 5);
+      let num = zeroFill(saveIndex, 5); //zeroFill(imgIDs[saveIndex], 5);
       if (imgs[saveIndex] != null) imgs[saveIndex].save('photo' + num, 'jpg');
       else console.log(imgs[saveIndex], saveIndex, "not viable?");
       saveIndex++;
@@ -93,8 +126,7 @@ function fail(i) {
   console.log("failed", i);
 }
 
-function zeroFill( number, width )
-{
+function zeroFill( number, width ){
   width -= number.toString().length;
   if ( width > 0 )
   {
@@ -128,6 +160,7 @@ non-negative integers.
 Street View images can be returned in any size up to 640 x 640 pixels.
 Unless you are a premium member,  2048 x 2048 pixels
 */
+
 function getStreetViewURL(loc) {
   let w = 456;
   let h = 456;

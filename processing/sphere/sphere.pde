@@ -7,9 +7,11 @@ PeasyCam cam;
 
 PImage img;
 int diam = 600;
+PShape sphere;
 
 void settings() {
-  size(1000, 800, P3D);
+  //size(1000, 800, P3D);
+  fullScreen(P3D);
 }
 
 void setup() {
@@ -18,8 +20,11 @@ void setup() {
 
   background(0);
   noStroke();
-  img=loadImage("jena.jpg");
+  img=loadImage("pano_dog_4iter.png");
   initializeSphere(30, 30);
+
+  //sphere = createShape(SPHERE);
+  //sphere.texture(img);
 }
 
 

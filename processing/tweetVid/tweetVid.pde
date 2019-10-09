@@ -6,6 +6,13 @@ PImage profilePic;
 PFont font;
 PFont boldFont;
 ArrayList<Tweet>tweets;
+boolean newTweet = false;
+float zoomIn = 0;
+
+
+import ddf.minim.*;
+Minim minim;
+AudioPlayer tweetSound;
 
 void setup() {
   //size(803, 1602);
@@ -13,8 +20,9 @@ void setup() {
   //println(803/1.5);
   //println(1602/1.5);
   //font = createFont("Helvetica.ttf", tSize, true);
-  font = createFont("Helvetica Neue 12.0d0e2", tSize, true);
-  boldFont = createFont("Helvetica Neue Bold 12.0d0e2", tSize, true);
+  PFont.list();
+  font = createFont("Helvetica Neue", tSize, true);
+  boldFont = createFont("Helvetica Neue Bold", tSize, true);
 
   tweets = new ArrayList<Tweet>();
   tweets.add(new Tweet("hello world hello world hello world hello world hello world hello world hello world", "images/0.png"));
@@ -24,16 +32,21 @@ void setup() {
   profilePic = loadImage("profilePic.png");
   mask = createGraphics(535, 296);
 
+
+
   mask.beginDraw();
   mask.background(0);
   mask.stroke(190);
   mask.fill(255);
   mask.rect(0, 0, mask.width, mask.height, 25);
   mask.endDraw();
+
+  minim = new Minim(this);
+  tweetSound = minim.loadFile("tweetSound.mp3", 2048);
 }
 
 void mousePressed() {
-  tweets.add(new Tweet("as asdlkas asdfjksdfljk ad;lkasd sda asdf;lkasdk ads ads", "images/0.png"));
+  addTweet("as asdlkas asdfjksdfljk ad;lkasd sda asdf;lkasdk ads ads", "images/0.png");
 }
 
 
@@ -49,6 +62,12 @@ void draw() {
   displayTweetNum();
 }
 
+void addTweet(String text, String path) {
+  tweets.add(new Tweet(text, path));
+  newTweet = true;
+  tweetSound.play();
+}
+
 void displayTime() {
   textFont(boldFont, 28);
   fill(255);
@@ -58,7 +77,10 @@ void displayTime() {
   int hour = hour();
   hour %= 12;
   if (hour == 0) hour = 12;
-  text(hour + ":" + minute(), 0, 0);
+  int min = minute();
+  String m = "" + min;
+  if (min < 10) m = "0" + min;
+  text(hour + ":" + m, 0, 0);
   popMatrix();
 }
 
@@ -77,6 +99,14 @@ void displayTweetNum() {
 void drawTweets() {
   pushMatrix();
   translate(70, 320);
+  if (newTweet) {
+    translate(0, -500 + zoomIn);
+    zoomIn+=20;
+    if (zoomIn >= 500) {
+      newTweet = false;
+      zoomIn = 0;
+    }
+  }
   for (int i = tweets.size() -1; i >= 0; i--) {
     tweets.get(i).display();
     translate(0, 500);

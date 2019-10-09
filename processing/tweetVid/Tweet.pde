@@ -10,7 +10,7 @@ class Tweet {
   PImage img;
   long time;
 
-  float y;
+  float h;
 
   Tweet(String text, String imgPath) {
     this.text = text;
@@ -27,7 +27,7 @@ class Tweet {
     // profile
     translate(0, 0);
     image(profilePic, 0, 0);
-
+    
     translate(profilePic.width + 20, 20);
 
     // name

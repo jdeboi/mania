@@ -1,6 +1,6 @@
 
 ArrayList<SendEmail>sentEmails;
-ArrayList<Email>receivedEmails;
+ArrayList<Message>receivedEmails;
 SendEmail currentEmail;
 AudioPlayer emailSound;
 PImage emailScreen, allEmailScreen, blueArrow;
@@ -22,27 +22,27 @@ void initEmail() {
   currentEmail = new SendEmail("sub", "asdfl ;ka sdf;lkj asd;flkja asdflk", "Everyone I. Know", "everyone@iknow.com");
   emailSound = minim.loadFile("sounds/emailSound.mp3", 2048);
 
-  receivedEmails = new ArrayList<Email>();
+  receivedEmails = new ArrayList<Message>();
 
-  receivedEmails.add(new Email("Are you ok?", "Hey dude. It's been a while. I've seen some weird emails from you, so i'm just checking in. Are you ok? Give me a ring when you get a chance.\n Love you!", 
+  receivedEmails.add(new Message("Are you ok?", "Hey dude. It's been a while. I've seen some weird emails from you, so i'm just checking in. Are you ok? Give me a ring when you get a chance.\n Love you!", 
     "Amanda", "goodfriend@checking.in", -10000));
 
-  receivedEmails.add(new Email("Please call ASAP", "Honey I'm really worried about you. Can you please call me ASAP?", 
+  receivedEmails.add(new Message("Please call ASAP", "Honey I'm really worried about you. Can you please call me ASAP?", 
     "Bubba", "someone@wholoves.me", -1000));
 
-  receivedEmails.add(new Email("Worried about you", "Jen I'm worried about you. Are you taking your meds? Do you need anything? Please call when you can.", 
+  receivedEmails.add(new Message("Worried about you", "Jen I'm worried about you. Are you taking your meds? Do you need anything? Please call when you can.", 
     "Mom", "family@keepsyouwhole.com", -3000));
 
-  receivedEmails.add(new Email("?", "I'm not really sure what you were trying to say.", 
+  receivedEmails.add(new Message("?", "I'm not really sure what you were trying to say.", 
     "David", "sorry@acquaintance.com", -30000));
 
-  receivedEmails.add(new Email("?", "I'm not really sure what you were trying to say.", 
+  receivedEmails.add(new Message("?", "I'm not really sure what you were trying to say.", 
     "David", "sorry@acquaintance.com", -30000));
 
-  receivedEmails.add(new Email("?", "I'm not really sure what you were trying to say.", 
+  receivedEmails.add(new Message("?", "I'm not really sure what you were trying to say.", 
     "David", "sorry@acquaintance.com", -30000));
 
-  receivedEmails.add(new Email("?", "I'm not really sure what you were trying to say.", 
+  receivedEmails.add(new Message("?", "I'm not really sure what you were trying to say.", 
     "David", "sorry@acquaintance.com", -30000));
 }
 
@@ -82,7 +82,7 @@ void displayEmail() {
 void displayReceivedEmails() {
   pushMatrix();
   translate(115*displayScale, 385*displayScale);
-  for (Email e : receivedEmails) {
+  for (Message e : receivedEmails) {
 
     pushMatrix();
 
@@ -138,7 +138,7 @@ void displayReceivedEmails() {
   popMatrix();
 }
 
-class Email {
+class Message {
 
   String subject;
   String body;
@@ -154,7 +154,7 @@ class Email {
   boolean isSending = false;
   boolean blueArrowOn = false;
 
-  Email(String sub, String bd, String senderName, String senderEmail, long t) {
+  Message(String sub, String bd, String senderName, String senderEmail, long t) {
     this.subject = sub;
     this.body = bd;
     this.senderName = senderName;
@@ -175,7 +175,7 @@ class Email {
   }
 }
 
-class SendEmail extends Email {
+class SendEmail extends Message {
 
   int strIndex = 0;
   boolean isComposing = true;
